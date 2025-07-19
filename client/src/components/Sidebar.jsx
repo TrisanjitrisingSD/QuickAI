@@ -1,5 +1,5 @@
 import { Protect, useClerk, useUser } from '@clerk/clerk-react'
-import { Hash, Image, House, SquarePen, Eraser, Scissors, FileText, Users, LogOut } from 'lucide-react';
+import { Hash, Image, House, SquarePen, Eraser, Scissors, FileText, Users, LogOut, Newspaper } from 'lucide-react';
 import React from 'react'
 import { NavLink } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ const navItems = [
     { to: '/ai/remove-object', label: 'Remove Object', Icon: Scissors },
     { to: '/ai/review-resume', label: 'Review Resume', Icon: FileText },
     { to: '/ai/community', label: 'Community', Icon: Users },
+    {to:'/ai/news',label:'news',Icon:Newspaper}
 ]
 
 
@@ -25,7 +26,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
 
 
     return (
-        <div className={`w-60 bg-white border-r border-gray-200 flex flex-col justify-between items-center max-sm:absolute top-14 bottom-0
+        <div className={`w-60 bg-white border-r h-full  border-gray-200 flex flex-col justify-between items-center max-sm:absolute top-14 bottom-0
     ${sidebar ? 'translate-x-0' : 'max-sm:-translate-x-full'} transition-all duration-300 ease-in-out
     `}>
             <div className='my-7 w-full'>

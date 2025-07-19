@@ -13,7 +13,7 @@ import Community from './pages/Community'
 import { useAuth } from '@clerk/clerk-react'
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
-
+import {DailyNewsPage} from './pages/DailyNewsPage'
 
 
 
@@ -36,6 +36,7 @@ const App = () => {
           <Route path='remove-object' element={<RemoveObject />} />
           <Route path='review-resume' element={<ReviewResume />} />
           <Route path='community' element={<Community />} />
+          <Route path='news' element={<DailyNewsPage />} />
         </Route>
       </Routes>
     </div>

@@ -76,3 +76,23 @@ export const toggleLikeCreation = async (req, res) => {
         res.json({ success: false, message: error.message });
     }
 }
+
+
+export const getNews = async (req, res) => {
+  const topic = req.query.q; 
+  const apiKey = process.env.NEWS_API_KEY;
+
+  try {
+    const url = `https://gnews.io/api/v4/search?q=${topic}&lang=en&country=in&max=15&apikey=${apiKey}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      return res.status(400).json({ success: false, message: "Failed to fetch news" });
+    }
+
+    const result = await response.json();
+    return res.json({ success: true, articles: result.articles }); 
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
