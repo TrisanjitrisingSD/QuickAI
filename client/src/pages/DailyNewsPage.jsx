@@ -130,6 +130,7 @@ export const DailyNewsPage = () => {
     const fetchNews = async (q = '') => {
         if(q===''){
             toast.error("Enter a topic to continue");
+            setLoading(false);
             return;
         }
         setLoading(true)
