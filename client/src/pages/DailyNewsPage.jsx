@@ -128,6 +128,10 @@ export const DailyNewsPage = () => {
     const [selectedArticle, setSelectedArticle] = useState(null)
 
     const fetchNews = async (q = '') => {
+        if(q===''){
+            toast.error("Enter a topic to continue");
+            return;
+        }
         setLoading(true)
         try {
             const { data } = await axios.get('/api/user/news', {
