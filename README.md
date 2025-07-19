@@ -16,8 +16,6 @@ Welcome to **Quick.ai**, an intelligent, multi-functional AI platform built usin
 
 ## 🚀 Tech Stack
 
-## 🚀 Tech Stack
-
 - ⚛️ **React.js (with Vite)** – Lightning-fast frontend development with modular components and hot module reloading using Vite
 
 - 🎨 **Tailwind CSS** – Utility-first CSS framework for building responsive, clean, and modern user interfaces with minimal effort
