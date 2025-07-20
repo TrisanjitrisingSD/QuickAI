@@ -13,7 +13,7 @@ const navItems = [
     { to: '/ai/review-resume', label: 'Review Resume', Icon: FileText },
     { to: '/ai/community', label: 'Community', Icon: Users },
     {to:'/ai/news',label:'news',Icon:Newspaper},
-    {to:'/ai/chat',label:'chat',Icon:MessageCircle}
+    {to:'/ai/chatt',label:'chatt',Icon:MessageCircle}
 ]
 
 

@@ -14,7 +14,7 @@ import { useAuth } from '@clerk/clerk-react'
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import {DailyNewsPage} from './pages/DailyNewsPage'
-import ChatBot from './pages/Chatbot'
+import ChatBot from './pages/ChatBot'
 
 
 
@@ -38,7 +38,7 @@ const App = () => {
           <Route path='review-resume' element={<ReviewResume />} />
           <Route path='community' element={<Community />} />
           <Route path='news' element={<DailyNewsPage />} />
-          <Route path='chat' element={<ChatBot />} />
+          <Route path='chatt' element={<ChatBot />} />
         </Route>
       </Routes>
     </div>
