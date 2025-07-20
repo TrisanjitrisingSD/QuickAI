@@ -160,7 +160,7 @@ export const DailyNewsPage = () => {
     }, [])
 
     return (
-        <div className='p-4 max-w-5xl mx-auto relative'>
+        <div className='h-full overflow-y-scroll p-6'>
             {/* Search Bar */}
             <div className='flex gap-2 mb-6'>
                 <input
