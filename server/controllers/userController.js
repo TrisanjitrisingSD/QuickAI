@@ -147,3 +147,20 @@ export const deletepic = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+export const deleteItem = async (req, res) => {
+    const { id } = req.body;
+
+    try {
+       const resp = await sql`DELETE FROM creations WHERE id = ${id} RETURNING id`;
+
+        if (resp.length > 0) {
+            return res.json({ success: true, message: 'Deleted Successfully' });
+        } else {
+            return res.json({ success: false, message: 'Item not found or already deleted' });
+        }
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
