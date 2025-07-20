@@ -8,7 +8,6 @@ import fs from 'fs'
 import pdf from 'pdf-parse/lib/pdf-parse.js'
 
 
-
 dotenv.config();
 
 
@@ -319,3 +318,36 @@ export const resumeReview = async (req, res) => {
     }
 }
 
+
+
+
+
+
+export const chata = async (req, res) => {
+  try {
+    const userMessage = req.body.message;
+
+    const response = await axios.post(
+      'https://api.cohere.ai/v1/chat',
+      {
+        message: userMessage,
+        chat_history: [], // required by Cohere
+        model: 'command-r-plus', // 'command-r' or 'command-r-plus'
+        temperature: 0.5,
+        stream: false
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.COHERE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const botReply = response.data.text || response.data.reply;
+    return res.status(200).json({ reply: botReply });
+  } catch (err) {
+    console.error('Cohere error:', err.response?.data || err.message);
+    return res.status(500).json({ error: 'Something went wrong with AI.' });
+  }
+};
