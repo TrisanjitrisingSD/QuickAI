@@ -351,3 +351,82 @@ export const chata = async (req, res) => {
     return res.status(500).json({ error: 'Something went wrong with AI.' });
   }
 };
+
+
+
+
+export const saveMessages = async (req, res) => {
+  try {
+    const { title, messages } = req.body;
+    const { userId } = req.auth;
+
+    if (!title || !messages || !Array.isArray(messages) || messages.length === 0) {
+      return res.status(400).json({ error: 'Invalid data provided' });
+    }
+
+    // 1. Create new chat
+    const chatInsertResult = await sql`
+      INSERT INTO chats (user_id, title)
+      VALUES (${userId}, ${title})
+      RETURNING id
+    `;
+
+    const chatId = chatInsertResult[0].id;
+
+    // 2. Insert all messages
+    const messageInserts = messages.map(msg => {
+      return sql`
+        INSERT INTO messages (chat_id, role, content)
+        VALUES (${chatId}, ${msg.role}, ${msg.content})
+      `;
+    });
+
+    await Promise.all(messageInserts);
+
+    res.status(201).json({ message: 'Chat saved successfully', chatId });
+  } catch (err) {
+    console.error('❌ Error saving messages:', err);
+    res.status(500).json({ error: 'Failed to save chat' });
+  }
+};
+
+export const getUserChats = async (req, res) => {
+  const {userId} = req.auth();
+  try {
+    const result = await sql`
+      SELECT id, title, created_at FROM chats
+      WHERE user_id = ${userId}
+      ORDER BY created_at DESC
+    `;
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch chats' });
+  }
+};
+
+
+
+
+export const getSingleChat = async (req, res) => {
+  const { userId } = req.auth(); // Make sure you're using Clerk's latest `req.auth()` function
+  const chatId = req.params.id;
+
+  try {
+    // Fetch messages from the messages table where chat_id matches
+    const messages = await sql`
+      SELECT id, chat_id, role, content, created_at
+      FROM messages
+      WHERE chat_id = ${chatId}
+      ORDER BY created_at ASC
+    `;
+
+    if (messages.rowCount === 0) {
+      return res.status(404).json({ error: 'No messages found for this chat' });
+    }
+
+    res.status(200).json(messages);
+  } catch (error) {
+    console.error('❌ Backend Error in getSingleChat:', error);
+    res.status(500).json({ error: 'Failed to load chat messages' });
+  }
+};
