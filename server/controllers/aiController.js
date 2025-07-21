@@ -392,7 +392,7 @@ export const getUserChats = async (req, res) => {
   const {userId} = req.auth();
   try {
     const result = await sql`
-      SELECT id, title, created_at FROM chats
+      SELECT id,user_id,title, created_at FROM chats
       WHERE user_id = ${userId}
       ORDER BY created_at DESC
     `;
@@ -426,5 +426,30 @@ export const getSingleChat = async (req, res) => {
   } catch (error) {
     console.error('❌ Backend Error in getSingleChat:', error);
     res.status(500).json({ error: 'Failed to load chat messages' });
+  }
+};
+
+
+
+
+export const Dele = async (req, res) => {
+  const { id } = req.body;
+  const { userId } = req.auth;
+
+  try {
+    const resp = await sql`
+      DELETE FROM chats
+      WHERE id = ${id} AND user_id = ${userId}
+      RETURNING id
+    `;
+
+    if (resp.length > 0) {
+      return res.status(200).json({ success: true, message: 'Deleted Successfully' });
+    } else {
+      return res.status(404).json({ success: false, message: 'Item not found or unauthorized' });
+    }
+  } catch (error) {
+    console.error('❌ Delete error:', error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from 'axios'
 import toast from 'react-hot-toast'
 // or your own auth logic
@@ -14,6 +14,10 @@ const ChatBot = () => {
   const [loading, setLoading] = useState(false);
   const [savedChats, setSavedChats] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [currentChatId, setCurrentChatId] = useState(null);
+
+
+
 
   const scrollRef = useRef(null);
 
@@ -26,12 +30,17 @@ const ChatBot = () => {
 
   const { getToken } = useAuth();
 
+  const { user } = useUser();
+  const userId = user?.id;
 
 
 
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
+    if (!input.trim()) {
+      toast.error('Please type something to ask');
+      return;
+    }
 
     const messageToSend = input.trim();
     const userMsg = { role: 'user', content: messageToSend };
@@ -98,6 +107,7 @@ const ChatBot = () => {
 
       if (response.status === 200 || response.status === 201) {
         toast.success("Chat saved successfully!");
+        fetchSavedChats();
       } else {
         throw new Error("Unexpected response");
       }
@@ -124,33 +134,61 @@ const ChatBot = () => {
   };
 
   const loadChatById = async (id) => {
-  try {
-    const res = await axios.get(`/api/ai/chatt/${id}`, {
-      headers: {
-        Authorization: `Bearer ${await getToken()}`
-      }
-    });
-
-    console.log('📦 Chat messages:', res.data);
-
-    if (Array.isArray(res.data)) {
-      const sortedMessages = res.data.sort((a, b) => {
-        const dateA = new Date(a.created_at || 0);
-        const dateB = new Date(b.created_at || 0);
-        return dateA - dateB;
+    try {
+      const res = await axios.get(`/api/ai/chatt/${id}`, {
+        headers: {
+          Authorization: `Bearer ${await getToken()}`
+        }
       });
-      setMessages(sortedMessages);
-    } else {
-      console.error('❌ Invalid messages response:', res.data);
+
+      if (Array.isArray(res.data)) {
+        const sortedMessages = res.data.sort((a, b) => {
+          const dateA = new Date(a.created_at || 0);
+          const dateB = new Date(b.created_at || 0);
+          return dateA - dateB;
+        });
+        setMessages(sortedMessages);
+        setCurrentChatId(id); 
+      } else {
+        console.error('❌ Invalid messages response:', res.data);
+        setMessages([]);
+      }
+    } catch (err) {
+      console.error('❌ Failed to load chat:', err);
       setMessages([]);
     }
-  } catch (err) {
-    console.error('❌ Failed to load chat:', err);
-    setMessages([]);
+  };
+
+  const handleDelete = async (id) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        '/api/ai/deletechat',
+        { id }, // ✅ payload
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        toast.success("deleted successfully");
+        setShowHistory(false);
+        if (id === currentChatId) {
+        setMessages([]);
+        setCurrentChatId(null); // also reset tracker
+      }
+
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   }
-};
-
-
 
 
   return (
@@ -251,19 +289,34 @@ const ChatBot = () => {
                 <p className="text-gray-500">No saved chats yet.</p>
               ) : (
                 <ul className="space-y-2">
-                  {savedChats.map((chat) => (
-                    <li
-                      key={chat.id}
-                      onClick={() => loadChatById(chat.id)}
-                      className="cursor-pointer text-blue-600 hover:underline"
-                    >
-                      {chat.title} <span className="text-xs text-gray-400">({new Date(chat.created_at).toLocaleString()})</span>
-                    </li>
-                  ))}
+                  {savedChats
+                    .filter((chat) => chat.user_id === userId)
+                    .map((chat) => (
+                      <li
+                        key={chat.id}
+                        className="flex justify-between items-center px-3 py-2 bg-white border rounded hover:bg-gray-100 transition cursor-pointer"
+                      >
+                        <div onClick={() => loadChatById(chat.id)} className="flex-1 text-blue-600 hover:underline">
+                          {chat.title}
+                          <span className="ml-2 text-xs text-gray-400">
+                            ({new Date(chat.created_at).toLocaleString()})
+                          </span>
+                        </div>
+
+                        <button
+                          onClick={() => handleDelete(chat.id)}
+                          className="ml-4 px-2 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600 transition"
+                        >
+                          Delete
+                        </button>
+                      </li>
+                    ))}
+
                 </ul>
               )}
             </div>
           )}
+
 
         </div>
       </div>
