@@ -128,7 +128,7 @@ export const DailyNewsPage = () => {
     const [selectedArticle, setSelectedArticle] = useState(null)
 
     const fetchNews = async (q = '') => {
-        if(q===''){
+        if (q === '') {
             toast.error("Enter a topic to continue");
             setLoading(false);
             return;
@@ -162,7 +162,7 @@ export const DailyNewsPage = () => {
     return (
         <div className='h-full overflow-y-scroll p-6'>
             {/* Search Bar */}
-            <div className='flex gap-2 mb-6'>
+            {/* <div className='flex gap-2 mb-6'>
                 <input
                     type='text'
                     value={topic}
@@ -176,7 +176,30 @@ export const DailyNewsPage = () => {
                 >
                     Get News
                 </button>
-            </div>
+            </div> */}
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault(); // prevent page reload
+                    fetchNews(topic);   // trigger fetch on Enter
+                }}
+            >
+                <div className='flex gap-2 mb-6'>
+                    <input
+                        type='text'
+                        value={topic}
+                        onChange={(e) => setTopic(e.target.value)}
+                        placeholder='Enter a topic like AI, Technology, Health...'
+                        className='w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500'
+                    />
+                    <button
+                        type='submit'
+                        className='px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium rounded-lg hover:opacity-90 transition'
+                    >
+                        Get News
+                    </button>
+                </div>
+            </form>
+
 
             {/* Loading */}
             {loading ? (

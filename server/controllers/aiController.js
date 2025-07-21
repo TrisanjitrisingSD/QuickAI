@@ -364,24 +364,21 @@ export const saveMessages = async (req, res) => {
       return res.status(400).json({ error: 'Invalid data provided' });
     }
 
-    // 1. Create new chat
+    // 1. Create a new chat entry
     const chatInsertResult = await sql`
       INSERT INTO chats (user_id, title)
       VALUES (${userId}, ${title})
       RETURNING id
     `;
-
     const chatId = chatInsertResult[0].id;
 
-    // 2. Insert all messages
-    const messageInserts = messages.map(msg => {
-      return sql`
-        INSERT INTO messages (chat_id, role, content)
-        VALUES (${chatId}, ${msg.role}, ${msg.content})
+    // 2. Insert messages in the correct order (sequentially)
+    for (const msg of messages) {
+      await sql`
+        INSERT INTO messages (chat_id, role, content, created_at)
+        VALUES (${chatId}, ${msg.role}, ${msg.content}, NOW())
       `;
-    });
-
-    await Promise.all(messageInserts);
+    }
 
     res.status(201).json({ message: 'Chat saved successfully', chatId });
   } catch (err) {
@@ -389,6 +386,7 @@ export const saveMessages = async (req, res) => {
     res.status(500).json({ error: 'Failed to save chat' });
   }
 };
+
 
 export const getUserChats = async (req, res) => {
   const {userId} = req.auth();

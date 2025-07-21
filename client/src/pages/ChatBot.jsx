@@ -125,17 +125,24 @@ const ChatBot = () => {
 
   const loadChatById = async (id) => {
   try {
-    const res = await axios.get(`/api/ai/chatt/${id}`,{
-       headers: {
-          Authorization: `Bearer ${await getToken()}`
-        }
+    const res = await axios.get(`/api/ai/chatt/${id}`, {
+      headers: {
+        Authorization: `Bearer ${await getToken()}`
+      }
     });
+
     console.log('📦 Chat messages:', res.data);
+
     if (Array.isArray(res.data)) {
-      setMessages(res.data);
+      const sortedMessages = res.data.sort((a, b) => {
+        const dateA = new Date(a.created_at || 0);
+        const dateB = new Date(b.created_at || 0);
+        return dateA - dateB;
+      });
+      setMessages(sortedMessages);
     } else {
       console.error('❌ Invalid messages response:', res.data);
-      setMessages([]); // fallback to empty array
+      setMessages([]);
     }
   } catch (err) {
     console.error('❌ Failed to load chat:', err);
