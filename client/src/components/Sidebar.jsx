@@ -41,10 +41,12 @@ const Sidebar = ({ sidebar, setSidebar }) => {
                             end={to === '/ai'}
                             onClick={() => setSidebar(false)}
                             className={({ isActive }) =>
-                                `px-3.5 py-2.5 flex items-center gap-3 rounded transition-all duration-300 
-     ${isActive ? 'bg-gradient-to-r from-[#3C81F6] to-[#9234EA] text-white animate-pulse' : ''}`
+                                `px-3.5 py-2.5 flex items-center gap-3 rounded transition-transform duration-300 ease-in-out 
+     hover:scale-105 
+     ${isActive ? 'bg-gradient-to-r from-[#3C81F6] to-[#9234EA] text-white' : ''}`
                             }
                         >
+
 
                             {({ isActive }) => (
                                 <>
