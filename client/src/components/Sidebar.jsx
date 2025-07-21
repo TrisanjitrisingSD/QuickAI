@@ -42,7 +42,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
                             onClick={() => setSidebar(false)}
                             className={({ isActive }) =>
                                 `px-3.5 py-2.5 flex items-center gap-3 rounded transition-transform duration-300 ease-in-out 
-     hover:scale-105 hover:bg-yellow-200
+     hover:scale-105 hover:bg-yellow-100
      ${isActive ? 'bg-gradient-to-r from-[#3C81F6] to-[#9234EA] text-white' : ''}`
                             }
                         >
