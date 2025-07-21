@@ -1,12 +1,12 @@
-# 🤖 Quick.ai — Your AI Productivity Powerhouse
+# 🤖 WarniFy — Your AI Productivity Powerhouse
 
-Welcome to **Quick.ai**, an intelligent, multi-functional AI platform built using **React (Vite)**, **Tailwind CSS**, and powered by cutting-edge AI APIs like **Gemini** and **Clipdrop**. With seamless authentication via **Clerk**, secure image handling through **Cloudinary**, and a robust backend with **Express** and **NeonDB**, Quick.ai delivers writing, image, and career tools in one powerful, responsive dashboard — fast, smart, and delightful to use.
+Welcome to **WarniFy**, an intelligent, multi-functional AI platform built using **React (Vite)**, **Tailwind CSS**, and powered by cutting-edge AI APIs like **Gemini** and **Clipdrop**. With seamless authentication via **Clerk**, secure image handling through **Cloudinary**, and a robust backend with **Express** and **NeonDB**, Quick.ai delivers writing, image, and career tools in one powerful, responsive dashboard — fast, smart, and delightful to use.
 
 
 <!-- ![Quick.ai Screenshot](client/public/favicon.svg) -->
 
 <!-- Replace with actual screenshot or logo path -->
-<img src="client/public/favicon.svg" width="100" height="90" alt="Quick.ai logo" />
+<img src="client/public/favicon.svg" width="100" height="90" alt="WarniFy logo" />
 
 
 ---
@@ -72,7 +72,7 @@ We’re constantly evolving. Here's what’s next on the roadmap:
 
 ---
 
-## 🔥 Quick.ai — Think Less. Do More. Instantly.
+## 🔥 WarniFy — Think Less. Do More. Instantly.
 
 ## ❤️ Built With Love
 
