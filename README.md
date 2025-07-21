@@ -11,7 +11,7 @@ Welcome to **WarniFy**, an intelligent, multi-functional AI platform built using
 
 ---
 
-## LIVE DEMO :  https://quick-ai-opal.vercel.app
+## LIVE DEMO :  https://warni-fy.vercel.app
 
 
 ## 🚀 Tech Stack
