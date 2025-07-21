@@ -191,7 +191,7 @@ export const DailyNewsPage = () => {
                         <div
                             key={index}
                             onClick={() => setSelectedArticle(article)}
-                            className='bg-white shadow-md rounded-xl overflow-hidden border hover:shadow-lg transition duration-200 flex flex-col cursor-pointer'
+                            className='relative bg-white shadow-md rounded-xl overflow-hidden border border-gray-200 hover:border-purple-500 hover:scale-[1.03] hover:shadow-[0_0_25px_rgba(168,85,247,0.4)] transition-all duration-300 ease-in-out flex flex-col cursor-pointer hover:bg-gradient-to-br hover:from-purple-50 hover:to-white'
                         >
                             {article.image && (
                                 <img
